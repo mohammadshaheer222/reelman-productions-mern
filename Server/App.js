@@ -17,7 +17,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //routes
 const adminController = require("./Controllers/adminController");
+const adminFormController = require("./Controllers/adminFormController");
 app.use("/api/v2", adminController);
+app.use("/api/v2/adminForm", adminFormController);
 
 //for error handling
 app.use(ErrorHandler);
