@@ -2,7 +2,12 @@ const mongoose = require("mongoose");
 
 const adminFormSchema = new mongoose.Schema({
   heroAvatar: {
-    type: String,
+    type: [String],
+    required: false,
+  },
+
+  midAvatar: {
+    type: [String],
     required: false,
   },
 });
