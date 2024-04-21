@@ -12,14 +12,16 @@ app.use(
     credentials: true,
   })
 );
-app.use("/", express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //routes
 const adminController = require("./Controllers/adminController");
-const adminFormController = require("./Controllers/adminFormController");
+const adminHeroController = require("./Controllers/adminHeroController");
+const adminMidController = require("./Controllers/adminMidController");
 app.use("/api/v2", adminController);
-app.use("/api/v2/adminForm", adminFormController);
+app.use("/api/v2", adminHeroController);
+app.use("/api/v2", adminMidController);
 
 //for error handling
 app.use(ErrorHandler);
