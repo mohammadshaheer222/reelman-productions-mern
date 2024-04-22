@@ -25,14 +25,15 @@ router.route("/create-mid").post(
       if (!req.files) {
         return next(new ErrorHandler("Image field is mandatory", 400));
       }
-      let midAvatar = [];
+
+      const avatars = [];
       for (const file of req.files) {
         const fileName = file.filename;
-        const fileUrl = path.join(fileName);
-        midAvatar.push(fileUrl);
+        const midAvatar = path.join(fileName);
+        const avatar = await AdminMid.create({ success: true, midAvatar });
+        avatars.push(avatar._id);
       }
-      const avatar = await AdminMid.create({ success: true, midAvatar });
-      res.status(201).json(avatar);
+      res.status(201).json({ avatars });
     } catch (error) {
       return next(new ErrorHandler("Bad Request", 400));
     }

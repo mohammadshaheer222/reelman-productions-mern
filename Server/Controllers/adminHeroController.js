@@ -21,18 +21,23 @@ router.route("/create-slide").post(
   upload.array("hero-avatar", 8),
   CatchAsyncErrors(async (req, res, next) => {
     try {
-      if (!req.files) {
+      if (!req.files || req.files.length === 0) {
         return next(new ErrorHandler("Image field is mandatory", 400));
       }
-      let heroAvatar = [];
+
+      const avatars = [];
+
       for (const file of req.files) {
         const fileName = file.filename;
-        const fileUrl = path.join(fileName);
-        heroAvatar.push(fileUrl);
+        const heroAvatar = path.join(fileName);
+        const avatar = await AdminHero.create({
+          success: true,
+          heroAvatar,
+        });
+        avatars.push(avatar._id);
       }
 
-      const avatar = await AdminHero.create({ success: true, heroAvatar });
-      res.status(201).json({ avatar });
+      res.status(201).json({ avatars });
     } catch (error) {
       return next(new ErrorHandler("Bad Request", 400));
     }
