@@ -19,10 +19,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const adminController = require("./Controllers/adminController");
 const adminHeroController = require("./Controllers/adminHeroController");
 const adminMidController = require("./Controllers/adminMidController");
-app.use("/api/v2", adminController);
-app.use("/api/v2", adminHeroController);
-app.use("/api/v2", adminMidController);
-
+const adminWeddingController = require("./Controllers/adminWeddingController");
+app.use(
+  "/api/v2",
+  adminController,
+  adminHeroController,
+  adminMidController,
+  adminWeddingController
+);
 //for error handling
 app.use(ErrorHandler);
 app.use(notFound);
