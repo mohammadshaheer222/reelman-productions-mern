@@ -25,8 +25,13 @@ router.route("/create-slide").post(
         return next(new ErrorHandler("Image field is mandatory", 400));
       }
 
-      const avatars = [];
+      if (req.files.length >= 8) {
+        return next(
+          new ErrorHandler("You can upload a maximum of 10 photos", 400)
+        );
+      }
 
+      const avatars = [];
       for (const file of req.files) {
         const fileName = file.filename;
         const heroAvatar = path.join(fileName);
@@ -37,9 +42,37 @@ router.route("/create-slide").post(
         avatars.push(avatar._id);
       }
 
-      res.status(201).json({ avatars });
+      res.status(201).json({ success: true, avatars });
     } catch (error) {
       return next(new ErrorHandler("Bad Request", 400));
+    }
+  })
+);
+
+router.route("/update-slide/:id").patch(
+  upload.single("file"),
+  CatchAsyncErrors(async (req, res, next) => {
+    try {
+      const { id: avatarId } = req.params;
+      const fileName = req.file.filename;
+
+      const heroAvatar = await AdminHero.findOneAndUpdate(
+        { _id: avatarId },
+        { heroAvatar: fileName },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+
+      if (!heroAvatar) {
+        return next(new ErrorHandler(`No image with this ${id}`, 404));
+      }
+
+      res.status(200).json({ success: true, heroAvatar });
+
+    } catch (error) {
+      return next(new ErrorHandler("Internal Server Error", 500));
     }
   })
 );
@@ -49,12 +82,15 @@ router.route("/delete-slide/:id").delete(
     try {
       const { id: heroId } = req.params;
       const heroAvatar = await AdminHero.findOneAndDelete({ _id: heroId });
+
       if (!heroAvatar) {
         return next(new ErrorHandler("No Images with this category", 404));
       }
+
       res.status(200).json({ success: true, heroAvatar });
+      
     } catch (error) {
-      console.log(error);
+      return next(new ErrorHandler("Internal Server Error", 500));
     }
   })
 );

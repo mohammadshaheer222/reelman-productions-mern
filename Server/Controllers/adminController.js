@@ -11,7 +11,7 @@ router.route("/login").post(
     try {
       const { email, password } = req.body;
       if (!email || !password) {
-        return next(new ErrorHandler("All fields are mandatory", 403));
+        return next(new ErrorHandler("Please Provide All Fields", 400));
       }
       // const userN = await Admin.create({email,password})
       const admin = await Admin.findOne({ email });
@@ -27,7 +27,7 @@ router.route("/login").post(
           .status(200)
           .json({ success: true, accessToken, message: "Login Successfull!!" });
       }
-      return next(new ErrorHandler("Email or Password is not valid", 400));
+      return next(new ErrorHandler("Invalid credentials", 400));
     } catch (error) {
       return next(new ErrorHandler(error.message, 400));
     }
