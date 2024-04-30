@@ -23,9 +23,19 @@ const weddingSchema = new mongoose.Schema({
     required: false,
   },
 
-  weddingAvatar: {
+  profile: {
     type: String,
-    required: [true, "Must Provide One Or More Files"],
+    required: true,
+  },
+
+  cover: {
+    type: String,
+    required: true,
+  },
+
+  weddingAvatar: {
+    type: [String],
+    required: [false, "Must Provide One Or More Files"],
   },
 });
 
