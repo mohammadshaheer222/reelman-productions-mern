@@ -64,9 +64,70 @@ router.route("/create-wedding").post(
   })
 );
 
-router.route("/delete-wedding").delete(
+router.route("/single-wedding/:id").get(
   catchAsyncErrors(async (req, res, next) => {
-    console.log(req.body);
+    const { id: weddingId } = req.params;
+    const wedding = await Wedding.findOne({ _id: weddingId });
+    if (!wedding) {
+      return next(new ErrorHandler("No Wedding with this id", 400));
+    }
+    res.status(200).json({ wedding });
+  })
+);
+
+router.route("/update-wedding/:id").patch(
+  upload.fields([
+    { name: "profile-avatar", maxCount: 1 },
+    { name: "cover-avatar", maxCount: 1 },
+    { name: "file", maxCount: 20 },
+  ]),
+  catchAsyncErrors(async (req, res, next) => {
+    const { id: weddingId } = req.params;
+    const {groom, bride, quote, description} = req.body;
+
+    const updatedFields = {
+      groom,
+      bride,
+      quote,
+      description
+    };
+
+    if (req.files["profile-avatar"]) {
+      updatedFields.profile = req.files["profile-avatar"][0].filename;
+    }
+
+    if (req.files["cover-avatar"]) {
+      updatedFields.cover = req.files["cover-avatar"][0].filename;
+    }
+
+    if (req.files["file"]) {
+      updatedFields.weddingAvatar = req.files["file"].map(
+        (file) => file.filename
+      );
+    }
+    
+    const wedding = await Wedding.findOneAndUpdate(
+      { _id: weddingId },
+      updatedFields,
+      { new: true, runValidators: true }
+    );
+
+    if (!wedding) {
+      return res.status(404).json({ msg: `No wedding with id: ${weddingId}` });
+    }
+
+    res.status(200).json({ wedding });
+  })
+);
+
+router.route("/delete-wedding/:id").delete(
+  catchAsyncErrors(async (req, res, next) => {
+    const { id: weddingId } = req.params;
+    const wedding = await Wedding.findOneAndDelete({ _id: weddingId });
+    if (!wedding) {
+      return next(new ErrorHandler("No Images with this id", 400));
+    }
+    res.status(200).json({ success: true, wedding });
   })
 );
 

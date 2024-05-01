@@ -6,6 +6,7 @@ const adminHeroSchema = new mongoose.Schema({
     required: [true, "Must Provide One Or More Files"],
   },
 
+  
 });
 
 module.exports = mongoose.model("hero-avatar", adminHeroSchema);
