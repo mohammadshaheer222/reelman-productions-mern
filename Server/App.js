@@ -16,10 +16,12 @@ app.use("/uploads", express.static("uploads"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //routes
-const adminController = require("./Controllers/adminController");
-const adminHeroController = require("./Controllers/adminHeroController");
-const adminMidController = require("./Controllers/adminMidController");
-const adminWeddingController = require("./Controllers/adminWeddingController");
+const adminController = require("./Controllers/Admin/adminController");
+const adminHeroController = require("./Controllers/Admin/adminHeroController");
+const adminMidController = require("./Controllers/Admin/adminMidController");
+const adminWeddingController = require("./Controllers/Admin/adminWeddingController");
+
+const userContactForm = require("./Controllers/User/contactController");
 app.use(
   "/api/v2",
   adminController,
@@ -27,6 +29,8 @@ app.use(
   adminMidController,
   adminWeddingController
 );
+
+app.use("/api/v2/user", userContactForm);
 //for error handling
 app.use(ErrorHandler);
 app.use(notFound);

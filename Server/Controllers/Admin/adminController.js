@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const catchAsynErrors = require("../Middleware/CatchAsyncErrors");
-const Admin = require("../Model/adminModel");
-const { comparePassword } = require("../Utils/bcrypt");
+const catchAsynErrors = require("../../Middleware/CatchAsyncErrors");
+const Admin = require("../../Model/Admin/adminModel");
+const { comparePassword } = require("../../Utils/bcrypt");
 const jwt = require("jsonwebtoken");
-const ErrorHandler = require("../Utils/ErrorHandler");
+const ErrorHandler = require("../../Utils/ErrorHandler");
 
 router.route("/login").post(
   catchAsynErrors(async (req, res, next) => {

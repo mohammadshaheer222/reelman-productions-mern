@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const Wedding = require("../Model/adminWeddingModel");
-const upload = require("../multer");
-const catchAsyncErrors = require("../Middleware/CatchAsyncErrors");
+const Wedding = require("../../Model/Admin/adminWeddingModel");
+const upload = require("../../multer");
+const catchAsyncErrors = require("../../Middleware/CatchAsyncErrors");
 const path = require("path");
-const ErrorHandler = require("../Utils/ErrorHandler");
+const ErrorHandler = require("../../Utils/ErrorHandler");
 
 router.route("/get-wedding").get(
   catchAsyncErrors(async (req, res, next) => {
@@ -83,13 +83,13 @@ router.route("/update-wedding/:id").patch(
   ]),
   catchAsyncErrors(async (req, res, next) => {
     const { id: weddingId } = req.params;
-    const {groom, bride, quote, description} = req.body;
+    const { groom, bride, quote, description } = req.body;
 
     const updatedFields = {
       groom,
       bride,
       quote,
-      description
+      description,
     };
 
     if (req.files["profile-avatar"]) {
@@ -105,7 +105,7 @@ router.route("/update-wedding/:id").patch(
         (file) => file.filename
       );
     }
-    
+
     const wedding = await Wedding.findOneAndUpdate(
       { _id: weddingId },
       updatedFields,

@@ -1,16 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const AdminMid = require("../Model/adminMidModel");
-const CatchAsyncErrors = require("../Middleware/CatchAsyncErrors");
-const upload = require("../multer");
+const AdminHero = require("../../Model/Admin/adminHeroModel");
+const CatchAsyncErrors = require("../../Middleware/CatchAsyncErrors");
+const upload = require("../../multer");
 const path = require("path");
-const ErrorHandler = require("../Utils/ErrorHandler");
+const ErrorHandler = require("../../Utils/ErrorHandler");
 
-//get all photos
-router.route("/get-mid").get(
+router.route("/get-slide").get(
   CatchAsyncErrors(async (req, res, next) => {
     try {
-      const avatar = await AdminMid.find({});
+      const avatar = await AdminHero.find({});
       res.status(200).json({ success: true, avatar });
     } catch (error) {
       return next(new ErrorHandler("Internal Server Error", 500));
@@ -18,8 +17,8 @@ router.route("/get-mid").get(
   })
 );
 
-router.route("/create-mid").post(
-  upload.array("mid-avatar", 8),
+router.route("/create-slide").post(
+  upload.array("hero-avatar", 8),
   CatchAsyncErrors(async (req, res, next) => {
     try {
       if (!req.files || req.files.length === 0) {
@@ -35,53 +34,63 @@ router.route("/create-mid").post(
       const avatars = [];
       for (const file of req.files) {
         const fileName = file.filename;
-        const midAvatar = path.join(fileName);
-        const avatar = await AdminMid.create({ success: true, midAvatar });
+        const heroAvatar = path.join(fileName);
+        const avatar = await AdminHero.create({
+          success: true,
+          heroAvatar,
+        });
         avatars.push(avatar._id);
       }
-      res.status(201).json({ avatars });
+
+      res.status(201).json({ success: true, avatars });
     } catch (error) {
       return next(new ErrorHandler("Bad Request", 400));
     }
   })
 );
 
-router.route("/update-mid/:id").patch(
+router.route("/update-slide/:id").patch(
   upload.single("file"),
   CatchAsyncErrors(async (req, res, next) => {
     try {
       const { id: avatarId } = req.params;
       const fileName = req.file.filename;
-      const midAvatar = await AdminMid.findOneAndUpdate(
+
+      const heroAvatar = await AdminHero.findOneAndUpdate(
         { _id: avatarId },
-        { midAvatar: fileName },
+        { heroAvatar: fileName },
         {
           new: true,
           runValidators: true,
         }
       );
 
-      if (!midAvatar) {
+      if (!heroAvatar) {
         return next(new ErrorHandler(`No image with this ${id}`, 404));
       }
-      res.status(200).json({ success: true, midAvatar });
+
+      res.status(200).json({ success: true, heroAvatar });
+
     } catch (error) {
-      console.log(error);
+      return next(new ErrorHandler("Internal Server Error", 500));
     }
   })
 );
 
-router.route("/delete-mid/:id").delete(
+router.route("/delete-slide/:id").delete(
   CatchAsyncErrors(async (req, res, next) => {
     try {
-      const { id: midId } = req.params;
-      const midAvatar = await AdminMid.findOneAndDelete({ _id: midId });
-      if (!midAvatar) {
+      const { id: heroId } = req.params;
+      const heroAvatar = await AdminHero.findOneAndDelete({ _id: heroId });
+
+      if (!heroAvatar) {
         return next(new ErrorHandler("No Images with this category", 404));
       }
-      res.status(200).json({ success: true, midAvatar });
+
+      res.status(200).json({ success: true, heroAvatar });
+      
     } catch (error) {
-      console.log(error);
+      return next(new ErrorHandler("Internal Server Error", 500));
     }
   })
 );
