@@ -5,8 +5,9 @@ const upload = require("../../multer");
 const catchAsyncErrors = require("../../Middleware/CatchAsyncErrors");
 const path = require("path");
 const ErrorHandler = require("../../Utils/ErrorHandler");
+const { verifyAdmin } = require("../../Middleware/verifyAdmin");
 
-router.route("/get-wedding").get(
+router.route("/get-wedding").get(verifyAdmin,
   catchAsyncErrors(async (req, res, next) => {
     try {
       const wedding = await Wedding.find({});
@@ -17,7 +18,7 @@ router.route("/get-wedding").get(
   })
 );
 
-router.route("/create-wedding").post(
+router.route("/create-wedding").post(verifyAdmin,
   upload.fields([
     { name: "profile-avatar", maxCount: 1 },
     { name: "cover-avatar", maxCount: 1 },

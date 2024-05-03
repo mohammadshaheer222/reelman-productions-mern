@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 const adminSchema = new mongoose.Schema({
   email: {
@@ -12,5 +14,11 @@ const adminSchema = new mongoose.Schema({
     // select: false,
   },
 });
+
+adminSchema.methods.getJwtToken = function () {
+  return jwt.sign({ id: this._id }, process.env.ACTIVATION_SECRET, {
+    expiresIn: process.env.ACTIVATION_COOKIE,
+  });
+};
 
 module.exports = mongoose.model("admin", adminSchema);

@@ -12,7 +12,7 @@ router.route("/get-slide").get(
       const avatar = await AdminHero.find({});
       res.status(200).json({ success: true, avatar });
     } catch (error) {
-      return next(new ErrorHandler("Internal Server Error", 500));
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
