@@ -15,7 +15,7 @@ app.use(
   })
 );
 app.use("/uploads", express.static("uploads"));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 //routes
 const adminController = require("./Controllers/Admin/adminController");

@@ -5,6 +5,7 @@ const CatchAsyncErrors = require("../../Middleware/CatchAsyncErrors");
 const upload = require("../../multer");
 const path = require("path");
 const ErrorHandler = require("../../Utils/ErrorHandler");
+const { verifyAdmin } = require("../../Middleware/verifyAdmin");
 
 //get all photos
 router.route("/get-mid").get(
@@ -41,7 +42,7 @@ router.route("/create-mid").post(
       }
       res.status(201).json({ avatars });
     } catch (error) {
-      return next(new ErrorHandler("Bad Request", 400));
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
@@ -66,7 +67,7 @@ router.route("/update-mid/:id").patch(
       }
       res.status(200).json({ success: true, midAvatar });
     } catch (error) {
-      console.log(error);
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
@@ -81,7 +82,7 @@ router.route("/delete-mid/:id").delete(
       }
       res.status(200).json({ success: true, midAvatar });
     } catch (error) {
-      console.log(error);
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );

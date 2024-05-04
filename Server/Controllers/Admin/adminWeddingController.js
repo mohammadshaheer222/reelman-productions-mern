@@ -7,7 +7,7 @@ const path = require("path");
 const ErrorHandler = require("../../Utils/ErrorHandler");
 const { verifyAdmin } = require("../../Middleware/verifyAdmin");
 
-router.route("/get-wedding").get(verifyAdmin,
+router.route("/get-wedding").get(
   catchAsyncErrors(async (req, res, next) => {
     try {
       const wedding = await Wedding.find({});
@@ -18,7 +18,7 @@ router.route("/get-wedding").get(verifyAdmin,
   })
 );
 
-router.route("/create-wedding").post(verifyAdmin,
+router.route("/create-wedding").post(
   upload.fields([
     { name: "profile-avatar", maxCount: 1 },
     { name: "cover-avatar", maxCount: 1 },

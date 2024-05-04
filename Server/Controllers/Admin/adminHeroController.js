@@ -5,6 +5,7 @@ const CatchAsyncErrors = require("../../Middleware/CatchAsyncErrors");
 const upload = require("../../multer");
 const path = require("path");
 const ErrorHandler = require("../../Utils/ErrorHandler");
+const { verifyAdmin } = require("../../Middleware/verifyAdmin");
 
 router.route("/get-slide").get(
   CatchAsyncErrors(async (req, res, next) => {
@@ -44,7 +45,7 @@ router.route("/create-slide").post(
 
       res.status(201).json({ success: true, avatars });
     } catch (error) {
-      return next(new ErrorHandler("Bad Request", 400));
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
@@ -70,9 +71,8 @@ router.route("/update-slide/:id").patch(
       }
 
       res.status(200).json({ success: true, heroAvatar });
-
     } catch (error) {
-      return next(new ErrorHandler("Internal Server Error", 500));
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
@@ -88,9 +88,8 @@ router.route("/delete-slide/:id").delete(
       }
 
       res.status(200).json({ success: true, heroAvatar });
-      
     } catch (error) {
-      return next(new ErrorHandler("Internal Server Error", 500));
+      return next(new ErrorHandler(error.message, 500));
     }
   })
 );
