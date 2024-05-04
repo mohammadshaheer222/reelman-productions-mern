@@ -25,7 +25,7 @@ const weddingSchema = new mongoose.Schema({
 
   profile: {
     type: String,
-    required: true,
+    required: false,
   },
 
   cover: {
@@ -33,9 +33,19 @@ const weddingSchema = new mongoose.Schema({
     required: true,
   },
 
+  gif: {
+    type: String,
+    required: false,
+  },
+
   weddingAvatar: {
     type: [String],
     required: [false, "Must Provide One Or More Files"],
+  },
+
+  link: {
+    type: [String],
+    required: [true, "Must provide Link"],
   },
 });
 

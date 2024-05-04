@@ -22,6 +22,7 @@ router.route("/create-wedding").post(
   upload.fields([
     { name: "profile-avatar", maxCount: 1 },
     { name: "cover-avatar", maxCount: 1 },
+    { name: "gif-avatar", maxCount: 1 },
     { name: "file", maxCount: 20 },
   ]),
   catchAsyncErrors(async (req, res, next) => {
@@ -35,15 +36,18 @@ router.route("/create-wedding").post(
         return next(new ErrorHandler("Image field is mandatory", 400));
       }
 
-      const weddingAvatar = [];
-      for (const file of req.files["file"]) {
-        const fileName = file.filename;
-        const avatar = path.join(fileName);
-        weddingAvatar.push(avatar);
+      const weddingAvatar = req.files["file"].map((file) => file.filename);
+
+      let profile, gif;
+      if (req.files["profile-avatar"]) {
+        const profileFile = req.files["profile-avatar"][0];
+        profile = profileFile.filename;
       }
 
-      const profileFile = req.files["profile-avatar"][0];
-      const profile = profileFile.filename;
+      if (req.files["gif-avatar"]) {
+        const gifFile = req.files["gif-avatar"][0];
+        gif = gifFile.filename;
+      }
 
       const coverFile = req.files["cover-avatar"][0];
       const cover = coverFile.filename;
@@ -55,6 +59,7 @@ router.route("/create-wedding").post(
         description,
         weddingAvatar,
         profile,
+        gif,
         cover,
       });
 
@@ -131,5 +136,6 @@ router.route("/delete-wedding/:id").delete(
     res.status(200).json({ success: true, wedding });
   })
 );
+
 
 module.exports = router;

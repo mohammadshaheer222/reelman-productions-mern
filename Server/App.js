@@ -22,14 +22,15 @@ const adminController = require("./Controllers/Admin/adminController");
 const adminHeroController = require("./Controllers/Admin/adminHeroController");
 const adminMidController = require("./Controllers/Admin/adminMidController");
 const adminWeddingController = require("./Controllers/Admin/adminWeddingController");
-
+const adminInstaController = require("./Controllers/Admin/adminInstaController");
 const userContactForm = require("./Controllers/User/contactController");
 app.use(
   "/api/v2",
   adminController,
   adminHeroController,
   adminMidController,
-  adminWeddingController
+  adminWeddingController,
+  adminInstaController
 );
 
 app.use("/api/v2/user", userContactForm);
