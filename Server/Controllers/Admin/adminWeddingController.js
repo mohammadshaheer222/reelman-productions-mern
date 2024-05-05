@@ -85,7 +85,7 @@ router.route("/update-wedding/:id").patch(
   upload.fields([
     { name: "profile-avatar", maxCount: 1 },
     { name: "cover-avatar", maxCount: 1 },
-    { name: "file", maxCount: 20 },
+    { name: "file", maxCount: 50 },
   ]),
   catchAsyncErrors(async (req, res, next) => {
     const { id: weddingId } = req.params;
@@ -106,11 +106,13 @@ router.route("/update-wedding/:id").patch(
       updatedFields.cover = req.files["cover-avatar"][0].filename;
     }
 
-    if (req.files["file"]) {
-      updatedFields.weddingAvatar = req.files["file"].map(
-        (file) => file.filename
-      );
+    if (req.files["file"].length > 50) {
+      return res.status(400).json({ message: "Maximum 50 photos are allowed" });
     }
+
+    updatedFields.weddingAvatar = req.files["file"].map(
+      (file) => file.filename
+    );
 
     const wedding = await Wedding.findOneAndUpdate(
       { _id: weddingId },

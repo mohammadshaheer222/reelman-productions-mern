@@ -40,7 +40,7 @@ const weddingSchema = new mongoose.Schema({
 
   weddingAvatar: {
     type: [String],
-    required: [false, "Must Provide One Or More Files"],
+    required: [true, "Must Provide One Or More Files"],
   },
 
   link: {

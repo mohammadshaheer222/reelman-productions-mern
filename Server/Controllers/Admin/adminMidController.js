@@ -20,16 +20,19 @@ router.route("/get-mid").get(
 );
 
 router.route("/create-mid").post(
-  upload.array("mid-avatar", 8),
+  upload.array("mid-avatar", 10),
   CatchAsyncErrors(async (req, res, next) => {
     try {
       if (!req.files || req.files.length === 0) {
         return next(new ErrorHandler("Image field is mandatory", 400));
       }
 
-      if (req.files.length >= 8) {
+      const dbPhotosCount = await AdminMid.countDocuments();
+      const totalUploadedFiles = dbPhotosCount + req.files.length;
+
+      if (totalUploadedFiles > 10) {
         return next(
-          new ErrorHandler("You can upload a maximum of 10 photos", 400)
+          new ErrorHandler("You can upload a maximum of 10 photos ,Delete photos in your list", 400)
         );
       }
 
@@ -40,7 +43,8 @@ router.route("/create-mid").post(
         const avatar = await AdminMid.create({ success: true, midAvatar });
         avatars.push(avatar._id);
       }
-      res.status(201).json({ avatars });
+
+      res.status(201).json({success: true, avatars });
     } catch (error) {
       return next(new ErrorHandler(error.message, 500));
     }

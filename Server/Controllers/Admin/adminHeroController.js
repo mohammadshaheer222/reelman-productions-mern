@@ -19,16 +19,22 @@ router.route("/get-slide").get(
 );
 
 router.route("/create-slide").post(
-  upload.array("hero-avatar", 8),
+  upload.array("hero-avatar", 4),
   CatchAsyncErrors(async (req, res, next) => {
     try {
       if (!req.files || req.files.length === 0) {
         return next(new ErrorHandler("Image field is mandatory", 400));
       }
 
-      if (req.files.length >= 8) {
+      const dbPhotosCount = await AdminHero.countDocuments();
+      const totalUploadedFiles = dbPhotosCount + req.files.length;
+
+      if (totalUploadedFiles > 4) {
         return next(
-          new ErrorHandler("You can upload a maximum of 10 photos", 400)
+          new ErrorHandler(
+            "You can upload a maximum of 4 photos ,Delete photos in your list",
+            400
+          )
         );
       }
 
