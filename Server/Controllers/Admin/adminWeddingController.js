@@ -23,7 +23,7 @@ router.route("/create-wedding").post(
     { name: "profile-avatar", maxCount: 1 },
     { name: "cover-avatar", maxCount: 1 },
     { name: "gif-avatar", maxCount: 1 },
-    { name: "file", maxCount: 20 },
+    { name: "file", maxCount: 70 },
   ]),
   catchAsyncErrors(async (req, res, next) => {
     try {
