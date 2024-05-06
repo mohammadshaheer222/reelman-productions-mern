@@ -140,4 +140,18 @@ router.route("/delete-wedding/:id").delete(
 );
 
 
+router.route("/latest-wedding").get(catchAsyncErrors(async(req, res, next) => {
+  try {
+    let wedding = await Wedding.find({});
+    if (!wedding) {
+      return next(new ErrorHandler("No wedding with this id", 400))
+    }
+    let latestWedding = wedding.slice(0).slice(-4);
+    res.json({ status: true, latestWedding });
+
+  } catch(error) {
+    return next(new ErrorHandler(error.message, 500))
+  }
+}))
+
 module.exports = router;
