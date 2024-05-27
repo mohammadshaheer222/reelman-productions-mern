@@ -5,7 +5,6 @@ const upload = require("../../multer");
 const catchAsyncErrors = require("../../Middleware/CatchAsyncErrors");
 const path = require("path");
 const ErrorHandler = require("../../Utils/ErrorHandler");
-const { verifyAdmin } = require("../../Middleware/verifyAdmin");
 
 router.route("/get-wedding").get(
   catchAsyncErrors(async (req, res, next) => {

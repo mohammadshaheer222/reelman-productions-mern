@@ -5,7 +5,6 @@ const CatchAsyncErrors = require("../../Middleware/CatchAsyncErrors");
 const upload = require("../../multer");
 const path = require("path");
 const ErrorHandler = require("../../Utils/ErrorHandler");
-const { verifyAdmin } = require("../../Middleware/verifyAdmin");
 
 //get all photos
 router.route("/get-mid").get(

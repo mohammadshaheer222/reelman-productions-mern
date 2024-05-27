@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const ErrorHandler = require("../../Utils/ErrorHandler");
 const sendMail = require("../../Utils/sendMail");
 const sendToken = require("../../Utils/jwtToken");
+const CatchAsyncErrors = require("../../Middleware/CatchAsyncErrors");
 
 router.route("/login").post(
   catchAsynErrors(async (req, res, next) => {
@@ -119,12 +120,6 @@ router.route("/reset-password/:token").post(
 
 //protected route
 
-
-
-
-
-
-
 // router.route("/verify-user").get(
 //   verifyAdmin,
 //   catchAsynErrors(async (req, res, next) => {
@@ -135,5 +130,12 @@ router.route("/reset-password/:token").post(
 //     }
 //   })
 // );
+
+router.route("/logout").get(
+  CatchAsyncErrors(async (req, res, next) => {
+    res.clearCookie("token");
+    res.status(200).json("User has been logged out!!!");
+  })
+);
 
 module.exports = router;
