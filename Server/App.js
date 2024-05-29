@@ -24,6 +24,7 @@ const adminMidController = require("./Controllers/Admin/adminMidController");
 const adminWeddingController = require("./Controllers/Admin/adminWeddingController");
 const adminInstaController = require("./Controllers/Admin/adminInstaController");
 const adminServiceController = require("./Controllers/Admin/adminServiceController");
+const adminDetailsController = require("./Controllers/Admin/adminDetailsController");
 const userContactForm = require("./Controllers/User/contactController");
 app.use(
   "/api/v2",
@@ -32,7 +33,8 @@ app.use(
   adminMidController,
   adminWeddingController,
   adminInstaController,
-  adminServiceController
+  adminServiceController,
+  adminDetailsController
 );
 
 app.use("/api/v2/user", userContactForm);

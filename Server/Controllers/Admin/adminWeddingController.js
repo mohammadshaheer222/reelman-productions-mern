@@ -3,7 +3,6 @@ const router = express.Router();
 const Wedding = require("../../Model/Admin/adminWeddingModel");
 const upload = require("../../multer");
 const catchAsyncErrors = require("../../Middleware/CatchAsyncErrors");
-const path = require("path");
 const ErrorHandler = require("../../Utils/ErrorHandler");
 
 router.route("/get-wedding").get(
@@ -109,13 +108,17 @@ router.route("/update-wedding/:id").patch(
       updatedFields.cover = req.files["cover-avatar"][0].filename;
     }
 
-    if (req.files["file"].length > 50) {
-      return res.status(400).json({ message: "Maximum 50 photos are allowed" });
-    }
+    if (req.files["file"]) {
+      if (req.files["file"].length > 50) {
+        return res
+          .status(400)
+          .json({ message: "Maximum 50 photos are allowed" });
+      }
 
-    updatedFields.weddingAvatar = req.files["file"].map(
-      (file) => file.filename
-    );
+      updatedFields.weddingAvatar = req.files["file"].map(
+        (file) => file.filename
+      );
+    }
 
     const wedding = await Wedding.findOneAndUpdate(
       { _id: weddingId },
@@ -130,6 +133,7 @@ router.route("/update-wedding/:id").patch(
     res.status(200).json({ success: true, wedding });
   })
 );
+
 
 router.route("/delete-wedding/:id").delete(
   catchAsyncErrors(async (req, res, next) => {
