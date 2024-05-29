@@ -16,14 +16,14 @@ router.route("/contact-form").post(
       Location: ${formData.location}
       Event Date: ${formData.date}
     `;
-      if (formData.photography) {
+      if (formData.selection.photography === true) {
         message += `  Photography: Yes`;
       }
-      if (formData.videography) {
+      if (formData.selection.videography === true) {
         message += `  Videography: Yes`;
       }
 
-      if (formData.both) {
+      if (formData.selection.both === true) {
         message += `  Both Photography and Videography: Yes`;
       }
       await sendMail({

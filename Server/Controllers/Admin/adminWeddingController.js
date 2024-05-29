@@ -62,6 +62,10 @@ router.route("/create-wedding").post(
         cover,
       });
 
+      if (!weddingData) {
+        return next(new ErrorHandler("Data not create", 400));
+      }
+
       res.status(201).json({ success: true, weddingData });
     } catch (error) {
       return next(new ErrorHandler("Internal Server Error", 500));
@@ -76,7 +80,7 @@ router.route("/single-wedding/:id").get(
     if (!wedding) {
       return next(new ErrorHandler("No Wedding with this id", 400));
     }
-    res.status(200).json({ wedding });
+    res.status(200).json({ success: true, wedding });
   })
 );
 
@@ -123,7 +127,7 @@ router.route("/update-wedding/:id").patch(
       return res.status(404).json({ msg: `No wedding with id: ${weddingId}` });
     }
 
-    res.status(200).json({ wedding });
+    res.status(200).json({ success: true, wedding });
   })
 );
 
@@ -138,19 +142,19 @@ router.route("/delete-wedding/:id").delete(
   })
 );
 
-
-router.route("/latest-wedding").get(catchAsyncErrors(async(req, res, next) => {
-  try {
-    let wedding = await Wedding.find({});
-    if (!wedding) {
-      return next(new ErrorHandler("No wedding with this id", 400))
+router.route("/latest-wedding").get(
+  catchAsyncErrors(async (req, res, next) => {
+    try {
+      const wedding = await Wedding.find({});
+      if (!wedding) {
+        return next(new ErrorHandler("No wedding with this id", 400));
+      }
+      const latestWedding = wedding.slice(0).slice(-4);
+      res.json({ status: true, latestWedding });
+    } catch (error) {
+      return next(new ErrorHandler(error.message, 500));
     }
-    let latestWedding = wedding.slice(0).slice(-4);
-    res.json({ status: true, latestWedding });
-
-  } catch(error) {
-    return next(new ErrorHandler(error.message, 500))
-  }
-}))
+  })
+);
 
 module.exports = router;
