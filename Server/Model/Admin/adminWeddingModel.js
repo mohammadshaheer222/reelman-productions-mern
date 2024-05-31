@@ -34,11 +34,6 @@ const weddingSchema = new mongoose.Schema(
       required: true,
     },
 
-    gif: {
-      type: String,
-      required: false,
-    },
-
     weddingAvatar: {
       type: [String],
       required: [true, "Must Provide One Or More Files"],

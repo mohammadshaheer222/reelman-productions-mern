@@ -4,6 +4,7 @@ const Wedding = require("../../Model/Admin/adminWeddingModel");
 const upload = require("../../multer");
 const catchAsyncErrors = require("../../Middleware/CatchAsyncErrors");
 const ErrorHandler = require("../../Utils/ErrorHandler");
+const fs = require("fs");
 
 router.route("/get-wedding").get(
   catchAsyncErrors(async (req, res, next) => {
@@ -20,7 +21,6 @@ router.route("/create-wedding").post(
   upload.fields([
     { name: "profile-avatar", maxCount: 1 },
     { name: "cover-avatar", maxCount: 1 },
-    { name: "gif-avatar", maxCount: 1 },
     { name: "file", maxCount: 70 },
   ]),
   catchAsyncErrors(async (req, res, next) => {
@@ -42,11 +42,6 @@ router.route("/create-wedding").post(
         profile = profileFile.filename;
       }
 
-      if (req.files["gif-avatar"]) {
-        const gifFile = req.files["gif-avatar"][0];
-        gif = gifFile.filename;
-      }
-
       const coverFile = req.files["cover-avatar"][0];
       const cover = coverFile.filename;
 
@@ -57,7 +52,6 @@ router.route("/create-wedding").post(
         description,
         weddingAvatar,
         profile,
-        gif,
         cover,
       });
 
@@ -102,7 +96,7 @@ router.route("/update-wedding/:id").patch(
 
     if (req.files["profile-avatar"]) {
       updatedFields.profile = req.files["profile-avatar"][0].filename;
-    }
+    } 
 
     if (req.files["cover-avatar"]) {
       updatedFields.cover = req.files["cover-avatar"][0].filename;

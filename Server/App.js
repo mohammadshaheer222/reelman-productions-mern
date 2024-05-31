@@ -22,6 +22,7 @@ const adminController = require("./Controllers/Admin/adminController");
 const adminHeroController = require("./Controllers/Admin/adminHeroController");
 const adminMidController = require("./Controllers/Admin/adminMidController");
 const adminWeddingController = require("./Controllers/Admin/adminWeddingController");
+const adminWeddingMidController = require("./Controllers/Admin/adminMidWedding");
 const adminInstaController = require("./Controllers/Admin/adminInstaController");
 const adminServiceController = require("./Controllers/Admin/adminServiceController");
 const adminDetailsController = require("./Controllers/Admin/adminDetailsController");
@@ -32,6 +33,7 @@ app.use(
   adminHeroController,
   adminMidController,
   adminWeddingController,
+  adminWeddingMidController,
   adminInstaController,
   adminServiceController,
   adminDetailsController
