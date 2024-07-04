@@ -30,7 +30,7 @@ router.route("/contact-form").post(
         subject: "Booking Details",
         message: message,
       });
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         message: "Thank you for your response!!",
       });
